@@ -16,9 +16,19 @@ export default class App extends Component {
   }
 
   addItem = (text) => {
-    const newItem = this.createTodoItem(text)
+    const trimmed = text.trim()
+    if (!trimmed) return
+    const newItem = this.createTodoItem(trimmed)
     this.setState(({ todoData }) => ({
       todoData: [...todoData, newItem],
+    }))
+  }
+
+  editTask = (id, text) => {
+    const trimmed = text.trim()
+    if (!trimmed) return
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((task) => (task.id === id ? { ...task, text: trimmed } : task)),
     }))
   }
 
@@ -78,7 +88,12 @@ export default class App extends Component {
           <NewTaskForm onItemAdded={this.addItem} />
         </Header>
         <section className="main">
-          <TaskList todos={filteredTasks} onDeleteTask={this.deleteTask} onToggleTaskDone={this.toggleTaskDone} />
+          <TaskList
+            todos={filteredTasks}
+            onDeleteTask={this.deleteTask}
+            onToggleTaskDone={this.toggleTaskDone}
+            onEditTask={this.editTask}
+          />
           <Footer
             tasksLeft={todoData.filter((task) => !task.completed).length}
             onFilterChange={this.changeFilter}
