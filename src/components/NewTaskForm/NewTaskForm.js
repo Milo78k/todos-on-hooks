@@ -17,7 +17,8 @@ export default class NewTaskForm extends Component {
     e.preventDefault()
     const { onItemAdded } = this.props
     const { text } = this.state
-    onItemAdded(text)
+    if (!text.trim()) return
+    onItemAdded(text.trim())
     this.setState({ text: '' })
   }
 
@@ -28,6 +29,7 @@ export default class NewTaskForm extends Component {
       <form onSubmit={this.onSubmit}>
         <input
           type="text"
+          aria-label="Новая задача"
           value={text}
           onChange={this.onLabelChange}
           className="new-todo"
